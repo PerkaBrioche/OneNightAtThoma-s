@@ -208,8 +208,6 @@ public class Animatronic : MonoBehaviour
         }
         else
         {
-
-
             Action = true;
         }
     }
@@ -228,6 +226,9 @@ public class Animatronic : MonoBehaviour
         Conduiting = false;
         HallWayingL = false;
         HallWayingR = false;
+        ConduitInt =0;
+        HallWay = 0;
+        
         
 
     }
