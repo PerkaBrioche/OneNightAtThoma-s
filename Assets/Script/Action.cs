@@ -11,16 +11,30 @@ public class Action : MonoBehaviour
     public Animator OfficeAnim;
     public Animator PlayerAnim;
     public GameObject Light;
+    public GameObject CameraButton;
     public bool Canflash;
     public bool HeadReady;
     public GameObject BatteryUI;
     public bool Turned;
     public Light FlashLight;
+
+    public bool cansound;
+
+
+    public AudioSource PlayerSource;
+
+    public AudioClip ReturnHead;
+    public AudioClip BackHead;
+    public AudioClip Flash;
+    public AudioClip DeFlash;
+    public AudioClip Zap;
+
     // Start is called before the first frame update
     void Start()
     {
         Cursor.lockState = CursorLockMode.Confined;
         Canflash = true;
+        cansound = true;
         HeadReady = true;
     }
 
@@ -29,22 +43,37 @@ public class Action : MonoBehaviour
     {
         if(Turned && HeadReady)
         {
-            if(Input.GetKey("t")) 
+            if (Input.GetKey("t")) 
             {
+                if (cansound)
+                {
+                    cansound = false;
+                    PlayerSource.PlayOneShot(Flash);
+
+                }
                 FlashLight.enabled = true;
             }
-            else
+            if (Input.GetKeyUp("t"))
             {
+                cansound = true;
+                PlayerSource.PlayOneShot(DeFlash);
                 FlashLight.enabled = false;
             }
         }
+        else
+        {
+        }
         if (Input.GetKeyDown("a") && Canflash)
         {
+            PlayerSource.PlayOneShot(Zap);
+
             Light.transform.position = LightPosL.transform.position;
             StartCoroutine(WaitFlash());
         }
         if (Input.GetKeyDown("e") && Canflash)
         {
+            PlayerSource.PlayOneShot(Zap);
+
             Light.transform.position = LightPosR.transform.position;
             StartCoroutine(WaitFlash());
         }
@@ -70,15 +99,23 @@ public class Action : MonoBehaviour
     {
         if (Turned == false && HeadReady)
         {
+            CameraButton.SetActive(false);
+
             StartCoroutine(WaitHead());
             PlayerAnim.Play("TurnHead");
             Turned = true;
+            PlayerSource.PlayOneShot(ReturnHead);
+
         }
         else if(Turned && HeadReady)
         {
             StartCoroutine(WaitHead());
             PlayerAnim.Play("BackHead");
             Turned = false;
+            CameraButton.SetActive(true);
+            PlayerSource.PlayOneShot(BackHead);
+
+
         }
     }
     IEnumerator WaitHead()
@@ -86,6 +123,7 @@ public class Action : MonoBehaviour
         HeadReady = false;
         yield return new WaitForSeconds(1.1f);
         HeadReady = true;
+
     }
 
 }
