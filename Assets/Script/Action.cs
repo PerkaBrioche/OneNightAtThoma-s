@@ -8,10 +8,12 @@ public class Action : MonoBehaviour
     public float CoolDown;
     public GameObject LightPosR;
     public GameObject LightPosL;
+    public GameObject RepairButton;
     public Animator OfficeAnim;
     public Animator PlayerAnim;
     public GameObject Light;
     public GameObject CameraButton;
+    public RepairCam RepairCam;
     public bool Canflash;
     public bool HeadReady;
     public GameObject BatteryUI;
@@ -19,6 +21,7 @@ public class Action : MonoBehaviour
     public Light FlashLight;
 
     public bool cansound;
+    public GameObject CamerabuttonObj;
 
 
     public AudioSource PlayerSource;
@@ -41,7 +44,7 @@ public class Action : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Turned && HeadReady)
+        if(Turned && HeadReady && RepairCam.RepairOpen == false)
         {
             if (Input.GetKey("t")) 
             {
@@ -49,7 +52,6 @@ public class Action : MonoBehaviour
                 {
                     cansound = false;
                     PlayerSource.PlayOneShot(Flash);
-
                 }
                 FlashLight.enabled = true;
             }
@@ -66,14 +68,12 @@ public class Action : MonoBehaviour
         if (Input.GetKeyDown("a") && Canflash)
         {
             PlayerSource.PlayOneShot(Zap);
-
             Light.transform.position = LightPosL.transform.position;
             StartCoroutine(WaitFlash());
         }
         if (Input.GetKeyDown("e") && Canflash)
         {
             PlayerSource.PlayOneShot(Zap);
-
             Light.transform.position = LightPosR.transform.position;
             StartCoroutine(WaitFlash());
         }
@@ -84,7 +84,6 @@ public class Action : MonoBehaviour
         {
             BatteryUI.transform.GetChild(i).gameObject.SetActive(false);
         }
-
         OfficeAnim.Play("LightFlash");
         Canflash = false;
         yield return new WaitForSeconds(CoolDown/3);
@@ -99,7 +98,9 @@ public class Action : MonoBehaviour
     {
         if (Turned == false && HeadReady)
         {
+            CamerabuttonObj.transform.localPosition = new Vector3(-843,-32,0);
             CameraButton.SetActive(false);
+            //RepairButton.SetActive(true);
 
             StartCoroutine(WaitHead());
             PlayerAnim.Play("TurnHead");
@@ -109,6 +110,10 @@ public class Action : MonoBehaviour
         }
         else if(Turned && HeadReady)
         {
+            CamerabuttonObj.transform.localPosition = new Vector3(843, -32, 0);
+            //RepairButton.SetActive(false);
+            FlashLight.enabled = false;
+
             StartCoroutine(WaitHead());
             PlayerAnim.Play("BackHead");
             Turned = false;

@@ -13,6 +13,7 @@ public class DiscordCall : MonoBehaviour
     public int Soustraction;
     public Animatronic Animatronic;
     public bool iscalling;
+    public PhoneCall PhoneCall;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +23,7 @@ public class DiscordCall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(CanCall)
+        if(CanCall && PhoneCall.EndCall)
         {
             RandomCall = Random.Range(0, 10);
             if (RandomCall == 0)
@@ -37,7 +38,6 @@ public class DiscordCall : MonoBehaviour
                 CanCall = false;
                 StartCoroutine(WaitForCall());
             }
-            
         }
     }
     public void HangUP()

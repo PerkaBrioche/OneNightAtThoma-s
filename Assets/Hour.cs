@@ -8,6 +8,9 @@ public class Hour : MonoBehaviour
     public float Timer;
     public TextMeshProUGUI HourText;
     public int HourInt;
+    public Animator CanvasAnim;
+    public Animatronic Animatronic;
+    public PhoneCall PhoneCall;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,13 +20,33 @@ public class Hour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        HourText.text ="0"+ HourInt.ToString() + "AM";
-        Timer += Time.deltaTime;
-        if (Timer >= 55)
+        if (PhoneCall.EndCall)
         {
-            Timer = 0;
-            HourInt++;
+
+
+            HourText.text = "0" + HourInt.ToString() + "AM";
+            Timer += Time.deltaTime;
+            if (Timer >= 55)
+            {
+                Timer = 0;
+                HourInt++;
+            }
+            if (HourInt == 6)
+            {
+                Animatronic.EndGame = true;
+                CanvasAnim.Play("EndNight");
+                StartCoroutine(CloseGame());
+            }
+        }
+        else
+        {
+            HourText.text = "";
         }
         
+    }
+    IEnumerator CloseGame()
+    {
+        yield return new WaitForSeconds(5.5f);
+        Application.Quit();
     }
 }

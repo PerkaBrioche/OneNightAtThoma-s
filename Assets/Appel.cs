@@ -10,6 +10,7 @@ public class Appel : MonoBehaviour
     public bool CanCall;
     public Animator CamAnim;
     public Animator CanvasAnim;
+    public Animatronic Animatronic;
     public CameraChoice CameraChoice;
     public GameObject SignalSonore;
     public GameObject CameraButton;
@@ -19,6 +20,8 @@ public class Appel : MonoBehaviour
     public AudioClip Suicide2;
     public AudioClip Suicide3;
     public AudioSource CamSource;
+
+    public GameObject LightCamera;
     
     // Start is called before the first frame update
     void Start()
@@ -35,6 +38,7 @@ public class Appel : MonoBehaviour
     {
         if (CanCall)
         {
+            LightCamera.SetActive(false);
             int han = Random.Range(0, 3);
             if(han == 0)
             {
@@ -51,7 +55,14 @@ public class Appel : MonoBehaviour
 
             }
             ThomasTrigger.transform.position = CameraChoice.AllCamera[CameraChoice.CameraChoose].CameraPos.transform.position;
-            ThomasTrigger.SetActive(true);
+            if(Animatronic.ConduitInt > 0)
+            {
+                print("NE PEUT PAS ETRE ENTENDU !");
+            }
+            else
+            {
+                ThomasTrigger.SetActive(true);
+            }
 
             CameraButton.SetActive(false);
             SignalSonore.transform.position = CameraChoice.AllCamera[CameraChoice.CameraChoose].SignalPos.transform.position;
@@ -84,13 +95,10 @@ public class Appel : MonoBehaviour
     }
     IEnumerator BackUpCamera()
     {
-
         yield return new WaitForSeconds(5);
         CameraButton.SetActive(true);
         ThomasTrigger.SetActive(false);
-
-
-
+        LightCamera.SetActive(true);
     }
 
 }
